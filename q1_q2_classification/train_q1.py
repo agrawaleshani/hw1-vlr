@@ -16,16 +16,16 @@ if __name__ == "__main__":
 
     # TODO experiment a little and choose the correct hyperparameters
     # You should get a map of around 22 in 5 epochs
-    # args = ARGS(
-    #     epochs=10,
-    #     inp_size=64,
-    #     use_cuda=True,
-    #     val_every=70
-    #     lr=# TODO,
-    #     batch_size=#TODO,
-    #     step_size=#TODO,
-    #     gamma=#TODO
-    # )
+    args = ARGS(
+        epochs=10,
+        inp_size=64,
+        use_cuda=True,
+        val_every=70,
+        lr=0.003,# TODO,
+        batch_size=256,#TODO,
+        step_size=0.1,#TODO,
+        gamma=0.9#TODO
+    )
 
     print(args)
 

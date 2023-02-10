@@ -52,7 +52,7 @@ class VOCDataset(Dataset):
          where both class and weight are a numpy array in shape of [20],
         """
         label_list = []
-        for index in self.index_list:
+        for index in self.index_list[:2]:
             fpath = os.path.join(self.ann_dir, index + '.xml')
             tree = ET.parse(fpath)
             root  = tree.getroot()
@@ -112,8 +112,10 @@ class VOCDataset(Dataset):
         ])
 
         img = trans(img)
+        print(img.shape)
         lab_vec, wgt_vec = self.anno_list[index] 
         image = torch.FloatTensor(img)
+        print(image.shape)
         label = torch.FloatTensor(lab_vec)
         wgt = torch.FloatTensor(wgt_vec)
 

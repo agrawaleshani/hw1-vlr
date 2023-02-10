@@ -24,8 +24,7 @@ if __name__ == "__main__":
         lr=0.003,# TODO,
         batch_size=256,#TODO,
         step_size=0.1,#TODO,
-        gamma=0.9,
-        lambd = 0.1#TODO
+        gamma=0.9
     )
 
     print(args)

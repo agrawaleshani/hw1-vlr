@@ -22,19 +22,20 @@ def save_model(epoch, model_name, model):
     torch.save(model, filename)
 def sigmoid(Z):
     return 1.0/(1.0+np.exp(-Z))
-def custom_loss(out,target,wts,lambd):
+def custom_loss(out,target,wts):
     m = target.shape[0]
     sig_cross_entropy_loss = (-1/m)*np.sum(np.multiply(out,np.log(sigmoid(target))) + np.multiply((1-out),np.log(1-sigmoid(target))))
-    l2_loss = lambd/(2*m)*(np.sum(np.square(wts)) + np.sum(np.square(wts)))
+    l2_loss = 0.1/(2*m)*(np.sum(np.square(wts)) + np.sum(np.square(wts)))
     return sig_cross_entropy_loss + l2_loss
 
 def train(args, model, optimizer, scheduler=None, model_name='model'):
     writer = SummaryWriter()
     train_loader = utils.get_data_loader(
         'voc', train=True, batch_size=args.batch_size, split='trainval', inp_size=args.inp_size)
+    print("train loaded")
     test_loader = utils.get_data_loader(
         'voc', train=False, batch_size=args.test_batch_size, split='test', inp_size=args.inp_size)
-
+    print("test loaded")
     # Ensure model is in correct mode and on right device
     model.train()
     model = model.to(args.device)
@@ -47,13 +48,13 @@ def train(args, model, optimizer, scheduler=None, model_name='model'):
 
             optimizer.zero_grad()
             output = model(data)
-            
+            print("model output: ", output)
             # TODO implement a suitable loss function for multi-label classification
             # This function should take in network `output`, ground-truth `target`, weights `wgt` and return a single floating point number
             # You are NOT allowed to use any pytorch built-in functions
             # Remember to take care of underflows / overflows when writing your function
             loss = custom_loss(output,target,wgt)
-
+            print("loss computed")
             loss.backward()
             
             if cnt % args.log_every == 0:

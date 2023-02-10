@@ -20,7 +20,13 @@ def save_model(epoch, model_name, model):
         model_name, epoch+1)
     print("saving model at ", filename)
     torch.save(model, filename)
-
+def sigmoid(Z):
+    return 1.0/(1.0+np.exp(-Z))
+def custom_loss(out,target,wts,lambd):
+    m = target.shape[0]
+    sig_cross_entropy_loss = (-1/m)*np.sum(np.multiply(out,np.log(sigmoid(target))) + np.multiply((1-out),np.log(1-sigmoid(target))))
+    l2_loss = lambd/(2*m)*(np.sum(np.square(wts)) + np.sum(np.square(wts)))
+    return sig_cross_entropy_loss + l2_loss
 
 def train(args, model, optimizer, scheduler=None, model_name='model'):
     writer = SummaryWriter()
@@ -46,7 +52,7 @@ def train(args, model, optimizer, scheduler=None, model_name='model'):
             # This function should take in network `output`, ground-truth `target`, weights `wgt` and return a single floating point number
             # You are NOT allowed to use any pytorch built-in functions
             # Remember to take care of underflows / overflows when writing your function
-            loss = 0
+            loss = custom_loss(output,target,wgt)
 
             loss.backward()
             
